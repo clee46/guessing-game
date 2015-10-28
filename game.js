@@ -114,7 +114,30 @@ else {
     }
     // NUMERIC QUESTION
     else {
-
+      var numArray = [];    // to store all the number guesses
+      var current = parseInt(prompt('Question #' + (i+1) + ': ' + questions[i] + ' Guess a number.'));
+      while (!current) {
+          current = parseInt(prompt('Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+      }
+      while(current !== answers[i]) {
+        numArray.push(current);    // store the guess
+        if (current > answers[i]) {
+          current = parseInt(prompt('Your guess was too high. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+          while (!current) {
+            current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+          }
+        }
+        else {
+          current = parseInt(prompt('Your guess was too low. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+          while (!current) {
+            current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+          }
+        }
+      }
+      // alert(current + ' is correct!');
+      // alert('Your guesses were: ' + numArray);
+      // guesses.push(numArray);  // store all the guesses
+      // alert('Guesses array looks like this: ' + guesses[0] + ' and ' + guesses[1]);
     }
   }
 
