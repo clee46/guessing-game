@@ -34,29 +34,46 @@ var summary = "Let's see how you did!\n\n";                   // String to displ
 
 // PLAYER 1 PROVIDES QUESTIONS/ANSWERS/RESPONSES
 do {
-  var size = questions.length;
-  qType.push(prompt("Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer."));
-  while(qType[qType.length-1] !== '1' && qType[qType.length-1] !== '2') {
+  // Instructions for Player 1
+  qType.push(prompt("Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
+
+  // Exit the loop
+  if (qType[qType.length-1] === '3') {
     qType.pop();
-    qType.push(prompt("Sorry, that is not an option.  Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer."));
-  }
-  questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (size+1) + '. Or type done if you are finished.'));
-  var temp = questions.length;
-  // Leaves the loop when user inputs the word 'done'
-  if (questions[temp-1].toLowerCase() === 'done') {
-    questions.pop();
     break;
   }
-  var x = prompt('Please enter the correct answer');
-  while (!yesOrNo(answerChange(x))) {
-    x = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.');
+
+  // Proceed with entering Yes/No questions
+  if (qType[qType.length-1] === '1') {
+    questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
+    var temp = questions.length;
+    var x = prompt('Please enter the correct answer');
+    while (!yesOrNo(answerChange(x))) {
+      x = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.');
+    }
+    answers.push(answerChange(x).toLowerCase());
+    responses.push(prompt('Please enter your detailed answer.'));
   }
 
-  answers.push(answerChange(x).toLowerCase());
-  responses.push(prompt('Please enter your detailed answer.'));
-} while (questions[temp] !== 'done');
+  // Proceed with numeric questions
+  if (qType[qType.length-1] === '2') {
+    questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
+    var x = prompt('Please enter the correct answer');
+    while (parseInt(x) === NaN) {
+      x = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.');
+    }
+    answers.push(parseInt(x));
+    responses.push(parseInt(x));
+  }
 
+  // Invalid inputs
+  while (qType[qType.length-1] !== '1' && qType[qType.length-1] !== '2' && qType[qType.length-1] !== '3') {
+    qType.pop();
+    qType.push(prompt("Sorry, that is not an option.  Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
+  }
+} while (qType[qType.length-1] !== '3');
 
+/*
 // PLAYER 2 BEGINS GUESSING GAME HERE
 // If no questions were provided, alert user the game is over!
 if (questions.length === 0) {
@@ -103,4 +120,4 @@ else {
   alert(summary);
 }
 
-alert("Let's play a bonus round! Player 1 will now enter questions that have a numeric answer.  Let's begin!");
+alert("Let's play a bonus round! Player 1 will now enter questions that have a numeric answer.  Let's begin!");*/
