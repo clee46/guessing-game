@@ -1,4 +1,4 @@
-// v1.4 Add numeric question/answer
+// v1.4 Add numeric question/answer with error check
 // v1.3 Summarizes user results; more personalized results; added error correction
 // v1.2 Detailed instructions; users can choose their own questions
 // v1.1 All data/user input stored in arrays
@@ -26,7 +26,7 @@ var user2 = prompt("Great! Now, enter Player 2's name:");
 var questions = [];                 // Store Player 1's questions
 var qType = [];                     // Keep track of the type of question (1: y/n, 2: #)
 var answers = [];                   // Store Player 1's answers
-var responses = [];                 // Store Player 1's responses
+var responses = [];                 // Store Player 1's responses (for y/n questions only)
 var guesses = [];                   // Store Player 2's guesses
 var results = [];                   // Store Player 2's scores (correct/incorrect)
 var score = 0;                      // Count number of Player 2's correct guesses
@@ -37,13 +37,13 @@ do {
   // Instructions for Player 1
   qType.push(prompt("Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
 
-  // Exit the loop
+  // Exit the loop if Player 1 selects '3'
   if (qType[qType.length-1] === '3') {
     qType.pop();
     break;
   }
 
-  // Proceed with entering Yes/No questions
+  // Proceed with entering Yes/No questions if Player 1 selects '1'
   if (qType[qType.length-1] === '1') {
     questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
     var temp = questions.length;
@@ -55,11 +55,12 @@ do {
     responses.push(prompt('Please enter your detailed answer.'));
   }
 
-  // Proceed with numeric questions
+  // Proceed entering numeric questions if Player 1 selects '2'
   if (qType[qType.length-1] === '2') {
     questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
-    var x = prompt('Please enter the correct answer');
-    while (!parseInt(x)) {
+    var x = parseInt(prompt('Please enter the correct answer'));
+    while (!x) {
+      if (x === 0) {break;}
       x = prompt('Please re-enter your answer.  Only numeric answers are accepted.');
     }
     answers.push(parseInt(x));
@@ -112,6 +113,7 @@ else {
         results.push('x');    // store that player guessed wrong
       }
     }
+
     // NUMERIC QUESTION
     else {
       var numArray = [];    // to store all the number guesses
@@ -124,22 +126,22 @@ else {
         if (current > answers[i]) {
           current = parseInt(prompt('Your guess was too high. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
           while (!current) {
+            if (current === 0) {break;}
             current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
           }
         }
         else {
           current = parseInt(prompt('Your guess was too low. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
           while (!current) {
+            if (current === 0) {break;}
             current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
           }
         }
       }
-      results.push('o');    // placeholder
-      responses.push('1');  // placeholder
+      results.push('o');                // placeholder
+      responses.push('1');              // placeholder
       alert(current + ' is correct!');
-      // alert('Your guesses were: ' + numArray);
-      guesses.push(numArray);  // store all the guesses
-      // alert('Guesses array looks like this: ' + guesses[0] + ' and ' + guesses[1]);
+      guesses.push(numArray);           // stores all the guesses
     }
   }
 
@@ -156,14 +158,7 @@ else {
     else {
       summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you made the following guesses: ' + guesses[j] + ' before correctly guessing: ' + answers[j];
     }
-
   }
-  alert(summary);
-  /*
-  var ratio = score/questions.length;
-  summary += '\n\nYou answered ' + score + ' questions correctly out of ' + questions.length + ' total questions (' + (ratio*100) + '%). ';
-  if (ratio >= 0.60) {summary += 'You are a pretty good guesser!';}
-  else {summary += 'You need to work on your guessing!';}
-  alert(summary);*/
+  alert(summary);       // Display the summary results
 }
 
