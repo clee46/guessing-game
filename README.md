@@ -28,3 +28,28 @@ v1.1
 v1.0
 
 - All data/user input stored in variables
+
+Knock-Knock Joke
+
+Person 1: Knock-Knock
+
+Person 2: Who's there?
+
+Person 1: Interrupting cow.
+
+Person 2: Interrupting cow wh-
+
+Person 1: MOO!
+
+For Physics majors:
+
+Person 1: Knock-Knock
+
+Person 2: Who's there?
+
+Person 1: Interrupting coefficient of friction.
+
+Person 2: Interrupting coefficient of friction wh-
+
+Person 1: MU!
+
