@@ -1,4 +1,4 @@
-// v1.4
+// v1.4 Add numeric question/answer
 // v1.3 Summarizes user results; more personalized results; added error correction
 // v1.2 Detailed instructions; users can choose their own questions
 // v1.1 All data/user input stored in arrays
@@ -24,6 +24,7 @@ var user2 = prompt("Great! Now, enter Player 2's name:");
 
 // DECLARE VARIABLES
 var questions = [];                 // Store Player 1's questions
+var qType = [];                     // Keep track of the type of question (1: y/n, 2: #)
 var answers = [];                   // Store Player 1's answers
 var responses = [];                 // Store Player 1's responses
 var guesses = [];                   // Store Player 2's guesses
@@ -34,6 +35,11 @@ var summary = "Let's see how you did!\n\n";                   // String to displ
 // PLAYER 1 PROVIDES QUESTIONS/ANSWERS/RESPONSES
 do {
   var size = questions.length;
+  qType.push(prompt("Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer."));
+  while(qType[qType.length-1] !== '1' && qType[qType.length-1] !== '2') {
+    qType.pop();
+    qType.push(prompt("Sorry, that is not an option.  Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer."));
+  }
   questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (size+1) + '. Or type done if you are finished.'));
   var temp = questions.length;
   // Leaves the loop when user inputs the word 'done'
@@ -96,3 +102,5 @@ else {
   else {summary += 'You need to work on your guessing!';}
   alert(summary);
 }
+
+alert("Let's play a bonus round! Player 1 will now enter questions that have a numeric answer.  Let's begin!");
