@@ -59,8 +59,8 @@ do {
   if (qType[qType.length-1] === '2') {
     questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
     var x = prompt('Please enter the correct answer');
-    while (parseInt(x) === NaN) {
-      x = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.');
+    while (!parseInt(x)) {
+      x = prompt('Please re-enter your answer.  Only numeric answers are accepted.');
     }
     answers.push(parseInt(x));
     responses.push(parseInt(x));
@@ -73,38 +73,52 @@ do {
   }
 } while (qType[qType.length-1] !== '3');
 
-/*
+
 // PLAYER 2 BEGINS GUESSING GAME HERE
+
 // If no questions were provided, alert user the game is over!
 if (questions.length === 0) {
   alert('Sorry, ' + user2 + '! ' + user1 + ' did not provide any questions for you!');
 }
 else {
   var understood = 'no';
+
+  // Make sure Player 2 is ready to play
   while (understood.toLowerCase() !== 'yes' && understood.toLowerCase() !== 'y') {
     understood = prompt('Ok, time for ' + user2 + ' to guess! Ready?');
     while (!yesOrNo(understood)) {
       understood = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.');
     }
   }
+
+  // BEGIN ASKING QUESTIONS
   for (var i = 0; i < questions.length; i++) {
-    // Ask each question and store each user input
-    guesses[i] = answerChange(prompt('Question #' + (i+1) + ': ' + questions[i]));
-    while (!yesOrNo(guesses[i])) {
-      guesses[i] = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.\n\nQuestion #' + (i+1) + ': ' + questions[i]);
+    // YES/NO QUESTION
+    if (qType[i] === '1') {
+      // Ask each question and store each user input
+      guesses[i] = answerChange(prompt('Question #' + (i+1) + ': ' + questions[i] + ' Answer Yes/No'));
+      while (!yesOrNo(guesses[i])) {
+        guesses[i] = answerChange(prompt('Please re-enter your answer.  Only Yes/No answers are accepted.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+      }
+      // If user guessed right, alert them they are correct
+      if (guesses[i].toLowerCase() === answers[i]) {
+        alert('You are correct, ' + user2 + '! ' + responses[i]);
+        results.push('o');
+        score++;
+      }
+      // If user guessed wrong, provide the correct response
+      else {
+        alert('Sorry, ' + user1 + '! ' + responses[i]);
+        results.push('x');
+      }
     }
-    // If user guessed right, alert them they are correct
-    if (guesses[i].toLowerCase() === answers[i]) {
-      alert('You are correct, ' + user2 + '! ' + responses[i]);
-      results.push('o');
-      score++;
-    }
-    // If user guessed wrong, provide the correct response
+    // NUMERIC QUESTION
     else {
-      alert('Sorry, ' + user1 + '! ' + responses[i]);
-      results.push('x');
+
     }
   }
+
+/*
   for (var j = 0; j < results.length; j++) {
     if (results[j] === 'o') {
       summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you correctly answered: ' + guesses[j].toLowerCase() + '\n';
@@ -117,7 +131,6 @@ else {
   summary += '\n\nYou answered ' + score + ' questions correctly out of ' + questions.length + ' total questions (' + (ratio*100) + '%). ';
   if (ratio >= 0.60) {summary += 'You are a pretty good guesser!';}
   else {summary += 'You need to work on your guessing!';}
-  alert(summary);
+  alert(summary);*/
 }
 
-alert("Let's play a bonus round! Player 1 will now enter questions that have a numeric answer.  Let's begin!");*/
