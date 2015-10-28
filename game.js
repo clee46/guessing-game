@@ -103,13 +103,13 @@ else {
       // If user guessed right, alert them they are correct
       if (guesses[i].toLowerCase() === answers[i]) {
         alert('You are correct, ' + user2 + '! ' + responses[i]);
-        results.push('o');
+        results.push('o');    // store that player guessed right
         score++;
       }
       // If user guessed wrong, provide the correct response
       else {
         alert('Sorry, ' + user1 + '! ' + responses[i]);
-        results.push('x');
+        results.push('x');    // store that player guessed wrong
       }
     }
     // NUMERIC QUESTION
@@ -134,22 +134,32 @@ else {
           }
         }
       }
-      // alert(current + ' is correct!');
+      results.push('o');    // placeholder
+      responses.push('1');  // placeholder
+      alert(current + ' is correct!');
       // alert('Your guesses were: ' + numArray);
-      // guesses.push(numArray);  // store all the guesses
+      guesses.push(numArray);  // store all the guesses
       // alert('Guesses array looks like this: ' + guesses[0] + ' and ' + guesses[1]);
     }
   }
 
-/*
-  for (var j = 0; j < results.length; j++) {
-    if (results[j] === 'o') {
-      summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you correctly answered: ' + guesses[j].toLowerCase() + '\n';
+  // Prepare the summary results
+  for (var j = 0; j < questions.length; j++) {
+    if (qType[j] === '1') {
+      if (results[j] === 'o') {
+        summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you correctly answered: ' + guesses[j].toLowerCase() + '\n';
+      }
+      else {
+        summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you incorrectly answered: ' + guesses[j].toLowerCase() + '\n';
+      }
     }
     else {
-      summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you incorrectly answered: ' + guesses[j].toLowerCase() + '\n';
+      summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you made the following guesses: ' + guesses[j] + ' before correctly guessing: ' + answers[j];
     }
+
   }
+  alert(summary);
+  /*
   var ratio = score/questions.length;
   summary += '\n\nYou answered ' + score + ' questions correctly out of ' + questions.length + ' total questions (' + (ratio*100) + '%). ';
   if (ratio >= 0.60) {summary += 'You are a pretty good guesser!';}
