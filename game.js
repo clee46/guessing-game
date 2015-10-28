@@ -30,7 +30,7 @@ var responses = [];                 // Store Player 1's responses (for y/n quest
 var guesses = [];                   // Store Player 2's guesses
 var results = [];                   // Store Player 2's scores (correct/incorrect)
 var score = 0;                      // Count number of Player 2's correct guesses
-var summary = "Let's see how you did!\n\n";                   // String to display summary of results
+var summary = "Let's see how you did!";                   // String to display summary of results
 
 // PLAYER 1 PROVIDES QUESTIONS/ANSWERS/RESPONSES
 do {
@@ -149,14 +149,14 @@ else {
   for (var j = 0; j < questions.length; j++) {
     if (qType[j] === '1') {
       if (results[j] === 'o') {
-        summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you correctly answered: ' + guesses[j].toLowerCase() + '\n';
+        summary = summary + '\n\nIn response to Question #' + (j+1) + ': ' + questions[j] + ' you correctly answered: ' + guesses[j].toLowerCase();
       }
       else {
-        summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you incorrectly answered: ' + guesses[j].toLowerCase() + '\n';
+        summary = summary + '\n\nIn response to Question #' + (j+1) + ': ' + questions[j] + ' you incorrectly answered: ' + guesses[j].toLowerCase();
       }
     }
     else {
-      summary = summary + 'In response to Question #' + (j+1) + ': ' + questions[j] + ' you made the following guesses: ' + guesses[j] + ' before correctly guessing: ' + answers[j];
+      summary = summary + '\n\nIn response to Question #' + (j+1) + ': ' + questions[j] + ' you made the following guesses: ' + guesses[j] + ' before correctly guessing: ' + answers[j];
     }
   }
   alert(summary);       // Display the summary results
