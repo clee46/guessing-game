@@ -33,19 +33,12 @@ var score = 0;                      // Count number of Player 2's correct guesse
 var summary = "Let's see how you did!";                   // String to display summary of results
 
 // PLAYER 1 PROVIDES QUESTIONS/ANSWERS/RESPONSES
-do {
-  // Instructions for Player 1
-  qType.push(prompt("Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
+function yesNo () {
 
-  // Exit the loop if Player 1 selects '3'
-  if (qType[qType.length-1] === '3') {
-    qType.pop();
-    break;
-  }
-
-  // Proceed with entering Yes/No questions if Player 1 selects '1'
+// Proceed with entering Yes/No questions if Player 1 selects '1'
   if (qType[qType.length-1] === '1') {
     questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
+   
     var temp = questions.length;
     var x = prompt('Please enter the correct answer');
     while (!yesOrNo(answerChange(x))) {
@@ -54,7 +47,8 @@ do {
     answers.push(answerChange(x).toLowerCase());
     responses.push(prompt('Please enter your detailed answer.'));
   }
-
+}
+function numericFunc () {
   // Proceed entering numeric questions if Player 1 selects '2'
   if (qType[qType.length-1] === '2') {
     questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
@@ -66,13 +60,29 @@ do {
     answers.push(parseInt(x));
     responses.push(parseInt(x));
   }
-
-  // Invalid inputs
+}
+function invalidTest () {
+ // Invalid inputs
   while (qType[qType.length-1] !== '1' && qType[qType.length-1] !== '2' && qType[qType.length-1] !== '3') {
     qType.pop();
     qType.push(prompt("Sorry, that is not an option.  Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
   }
+}
+do {
+  // Instructions for Player 1
+  qType.push(prompt("Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
+
+  // Exit the loop if Player 1 selects '3'
+  if (qType[qType.length-1] === '3') {
+    qType.pop();
+    break;
+  }
+
+yesNo();
+numericFunc();
+invalidTest();
 } while (qType[qType.length-1] !== '3');
+ 
 
 
 // PLAYER 2 BEGINS GUESSING GAME HERE
@@ -159,6 +169,7 @@ else {
       summary = summary + '\n\nIn response to Question #' + (j+1) + ': ' + questions[j] + ' you made the following guesses: ' + guesses[j] + ' before correctly guessing: ' + answers[j];
     }
   }
-  alert(summary);       // Display the summary results
+  var sum = document.getElementById('summary1');
+sum.innerHTML = '' + summary;       // Display the summary results
 }
 
