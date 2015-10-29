@@ -1,4 +1,4 @@
-// v1.5 Moved logic into functions, added summary to the DOM
+// v1.5 Moved logic into functions, added summary, user names to the DOM
 // v1.4 Add numeric question/answer with error check
 // v1.3 Summarizes user results; more personalized results; added error correction
 // v1.2 Detailed instructions; users can choose their own questions
@@ -60,6 +60,80 @@ function readyToPlay () {
   }
 }
 
+function answerYesNo () {
+  // Ask each question and store each user input
+  guesses[i] = answerChange(prompt('Question #' + (i+1) + ': ' + questions[i] + ' Answer Yes/No'));
+  while (!yesOrNo(guesses[i])) {
+    guesses[i] = answerChange(prompt('Please re-enter your answer.  Only Yes/No answers are accepted.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+  }
+  // If user guessed right, alert them they are correct
+  if (guesses[i].toLowerCase() === answers[i]) {
+    alert('You are correct, ' + user2 + '! ' + responses[i]);
+    results.push('o');    // store that player guessed right
+    score++;
+  }
+  // If user guessed wrong, provide the correct response
+  else {
+    alert('Sorry, ' + user1 + '! ' + responses[i]);
+    results.push('x');    // store that player guessed wrong
+  }
+}
+
+function numAnswer () {
+  var numArray = [];    // to store all the number guesses
+  var current = parseInt(prompt('Question #' + (i+1) + ': ' + questions[i] + ' Guess a number.'));
+  while (!current) {
+    current = parseInt(prompt('Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+  }
+  while(current !== answers[i]) {
+    numArray.push(current);    // store the guess
+    if (current > answers[i]) {
+      current = parseInt(prompt('Your guess was too high. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+      while (!current) {
+        if (current === 0) {break;}
+        current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+      }
+    }
+    else {
+      current = parseInt(prompt('Your guess was too low. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+      while (!current) {
+        if (current === 0) {break;}
+        current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+      }
+    }
+  }
+  results.push('o');                // placeholder (ensures indices remain accurate)
+  responses.push('1');              // placeholder (ensures indices remain accurate)
+  alert(current + ' is correct!');
+  guesses.push(numArray);           // stores all the guesses
+}
+
+function summarize () {
+  // Prepare the summary results
+  for (var j = 0; j < questions.length; j++) {
+    if (qType[j] === '1') {
+      if (results[j] === 'o') {
+        summary = summary + '<br />In response to Question #' + (j+1) + ': ' + questions[j] + ' you correctly answered: ' + guesses[j].toLowerCase();
+      }
+      else {
+        summary = summary + '<br />In response to Question #' + (j+1) + ': ' + questions[j] + ' you incorrectly answered: ' + guesses[j].toLowerCase();
+      }
+    }
+    else {
+      summary += '<br />In response to Question #' + (j+1) + ': ' + questions[j];
+      if (guesses[j].length === 0) {
+        summary += ' you correctly guessed ' + answers[j] + ' on the first try!';
+      }
+      else if (guesses[j].length === 1) {
+        summary += ' you guessed ' + guesses[j] + ' before correctly guessing ' + answers[j];
+      }
+      else {
+        summary += ' you made the following guesses: ' + guesses[j] + ' before correctly guessing ' + answers[j];
+      }
+    }
+  }
+}
+
 // INTRODUCE GAME AND REQUEST USER NAMES, PASSES NAMES TO DOM
 var user1 = prompt("In this game, Player 1 will provide questions/answers for Player 2 to answer.  Please enter Player 1's name now:");
 var user2 = prompt("Great! Now, enter Player 2's name:");
@@ -76,8 +150,9 @@ var responses = [];                 // Store Player 1's responses (for y/n quest
 var guesses = [];                   // Store Player 2's guesses
 var results = [];                   // Store Player 2's scores (correct/incorrect)
 var score = 0;                      // Count number of Player 2's correct guesses
-var summary = "Let's see how you did!";                   // String to display summary of results
+var summary = "Let's see how you did!<br />";                   // String to display summary of results
 
+// GAME BEGINS HERE
 // PLAYER 1 ENTERS QUESTIONS/ANSWERS
 do {
   qType.push(prompt("Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
@@ -96,74 +171,18 @@ if (questions.length === 0) {
   alert('Sorry, ' + user2 + '! ' + user1 + ' did not provide any questions for you!');
 }
 else {
-  readyToPlay();
-  // BEGIN ASKING QUESTIONS
+  readyToPlay();  // proceed only when player 2 is ready
   for (var i = 0; i < questions.length; i++) {
     // YES/NO QUESTION
     if (qType[i] === '1') {
-      // Ask each question and store each user input
-      guesses[i] = answerChange(prompt('Question #' + (i+1) + ': ' + questions[i] + ' Answer Yes/No'));
-      while (!yesOrNo(guesses[i])) {
-        guesses[i] = answerChange(prompt('Please re-enter your answer.  Only Yes/No answers are accepted.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
-      }
-      // If user guessed right, alert them they are correct
-      if (guesses[i].toLowerCase() === answers[i]) {
-        alert('You are correct, ' + user2 + '! ' + responses[i]);
-        results.push('o');    // store that player guessed right
-        score++;
-      }
-      // If user guessed wrong, provide the correct response
-      else {
-        alert('Sorry, ' + user1 + '! ' + responses[i]);
-        results.push('x');    // store that player guessed wrong
-      }
+      answerYesNo();
     }
-
     // NUMERIC QUESTION
     else {
-      var numArray = [];    // to store all the number guesses
-      var current = parseInt(prompt('Question #' + (i+1) + ': ' + questions[i] + ' Guess a number.'));
-      while (!current) {
-          current = parseInt(prompt('Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
-      }
-      while(current !== answers[i]) {
-        numArray.push(current);    // store the guess
-        if (current > answers[i]) {
-          current = parseInt(prompt('Your guess was too high. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
-          while (!current) {
-            if (current === 0) {break;}
-            current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
-          }
-        }
-        else {
-          current = parseInt(prompt('Your guess was too low. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
-          while (!current) {
-            if (current === 0) {break;}
-            current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
-          }
-        }
-      }
-      results.push('o');                // placeholder
-      responses.push('1');              // placeholder
-      alert(current + ' is correct!');
-      guesses.push(numArray);           // stores all the guesses
+      numAnswer();
     }
   }
-
-  // Prepare the summary results
-  for (var j = 0; j < questions.length; j++) {
-    if (qType[j] === '1') {
-      if (results[j] === 'o') {
-        summary = summary + '\n\nIn response to Question #' + (j+1) + ': ' + questions[j] + ' you correctly answered: ' + guesses[j].toLowerCase();
-      }
-      else {
-        summary = summary + '\n\nIn response to Question #' + (j+1) + ': ' + questions[j] + ' you incorrectly answered: ' + guesses[j].toLowerCase();
-      }
-    }
-    else {
-      summary = summary + '\n\nIn response to Question #' + (j+1) + ': ' + questions[j] + ' you made the following guesses: ' + guesses[j] + ' before correctly guessing: ' + answers[j];
-    }
-  }
+  summarize();
   var sum = document.getElementById('summary1');
   sum.innerHTML = '' + summary;       // Display the summary results
 }
