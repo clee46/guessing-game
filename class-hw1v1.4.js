@@ -1,40 +1,8 @@
-// v1.5 Moved logic into functions, added summary to the DOM
 // v1.4 Add numeric question/answer with error check
 // v1.3 Summarizes user results; more personalized results; added error correction
 // v1.2 Detailed instructions; users can choose their own questions
 // v1.1 All data/user input stored in arrays
 // v1.0 All data/user input stored in variables
-
-// Called when user selects 1 from menu, allows user to enter a y/n question
-function yesNo () {
-    questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
-
-    var temp = questions.length;
-    var x = prompt('Please enter the correct answer');
-    while (!yesOrNo(answerChange(x))) {
-      x = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.');
-    }
-    answers.push(answerChange(x).toLowerCase());
-    responses.push(prompt('Please enter your detailed answer.'));
-}
-
-// Called when user selects 2 from menu, allows user to enter a number question
-function numericFunc () {
-    questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
-    var x = parseInt(prompt('Please enter the correct answer'));
-    while (!x) {
-      if (x === 0) {break;}
-      x = prompt('Please re-enter your answer.  Only numeric answers are accepted.');
-    }
-    answers.push(parseInt(x));
-    responses.push(parseInt(x));
-}
-
-// Called when user enters invalid menu option
-function invalidTest () {
-    qType.pop();
-    qType.push(prompt("Sorry, that is not an option.  Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
-}
 
 // Determines whether input is in appropriate form
 function yesOrNo (str) {
@@ -43,32 +11,18 @@ function yesOrNo (str) {
   else {return false;}
 }
 
-// Translates single letter response into full words (standardizes responses)
+// Translates single letter responses into full words
 function answerChange (str) {
   if (str === 'y' || str === 'Y') {return 'yes';}
   else if (str === 'n' || str === 'N') {return 'no';}
   else {return str;}
 }
 
-function readyToPlay () {
-  var understood = 'no';
-  while (understood.toLowerCase() !== 'yes' && understood.toLowerCase() !== 'y') {
-    understood = prompt('Ok, time for ' + user2 + ' to guess! Ready?');
-    while (!yesOrNo(understood)) {
-      understood = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.');
-    }
-  }
-}
-
-// INTRODUCE GAME AND REQUEST USER NAMES, PASSES NAMES TO DOM
+// INTRODUCE GAME AND REQUEST USER NAMES
 var user1 = prompt("In this game, Player 1 will provide questions/answers for Player 2 to answer.  Please enter Player 1's name now:");
 var user2 = prompt("Great! Now, enter Player 2's name:");
-var play1 = document.getElementById('player1');
-var play2 = document.getElementById('player2');
-play1.innerHTML = 'Player 1: ' + user1;
-play2.innerHTML = 'Player 2: ' + user2;
 
-// DECLARE GLOBAL VARIABLES
+// DECLARE VARIABLES
 var questions = [];                 // Store Player 1's questions
 var qType = [];                     // Keep track of the type of question (1: y/n, 2: #)
 var answers = [];                   // Store Player 1's answers
@@ -78,25 +32,66 @@ var results = [];                   // Store Player 2's scores (correct/incorrec
 var score = 0;                      // Count number of Player 2's correct guesses
 var summary = "Let's see how you did!";                   // String to display summary of results
 
-// PLAYER 1 ENTERS QUESTIONS/ANSWERS
+// PLAYER 1 PROVIDES QUESTIONS/ANSWERS/RESPONSES
 do {
+  // Instructions for Player 1
   qType.push(prompt("Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
 
-  if (qType[qType.length-1] === '1') {yesNo();}               // y/n questions
-  else if (qType[qType.length-1] === '2') {numericFunc();}    // number questions
-  else if (qType[qType.length-1] === '3') {                   // exit
+  // Exit the loop if Player 1 selects '3'
+  if (qType[qType.length-1] === '3') {
     qType.pop();
     break;
   }
-  else {invalidTest();}                                       // invalid input
+
+  // Proceed with entering Yes/No questions if Player 1 selects '1'
+  if (qType[qType.length-1] === '1') {
+    questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
+    var temp = questions.length;
+    var x = prompt('Please enter the correct answer');
+    while (!yesOrNo(answerChange(x))) {
+      x = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.');
+    }
+    answers.push(answerChange(x).toLowerCase());
+    responses.push(prompt('Please enter your detailed answer.'));
+  }
+
+  // Proceed entering numeric questions if Player 1 selects '2'
+  if (qType[qType.length-1] === '2') {
+    questions.push(prompt(user1 + ', make sure ' + user2 + ' is not looking, then enter question #' + (questions.length+1) + '.'));
+    var x = parseInt(prompt('Please enter the correct answer'));
+    while (!x) {
+      if (x === 0) {break;}
+      x = prompt('Please re-enter your answer.  Only numeric answers are accepted.');
+    }
+    answers.push(parseInt(x));
+    responses.push(parseInt(x));
+  }
+
+  // Invalid inputs
+  while (qType[qType.length-1] !== '1' && qType[qType.length-1] !== '2' && qType[qType.length-1] !== '3') {
+    qType.pop();
+    qType.push(prompt("Sorry, that is not an option.  Enter '1' if you would like to enter a yes/no question.\nEnter '2' if you would like to enter a question with a numeric answer.\nEnter '3' if you are finished entering questions."));
+  }
 } while (qType[qType.length-1] !== '3');
 
+
 // PLAYER 2 BEGINS GUESSING GAME HERE
+
+// If no questions were provided, alert user the game is over!
 if (questions.length === 0) {
   alert('Sorry, ' + user2 + '! ' + user1 + ' did not provide any questions for you!');
 }
 else {
-  readyToPlay();
+  var understood = 'no';
+
+  // Make sure Player 2 is ready to play
+  while (understood.toLowerCase() !== 'yes' && understood.toLowerCase() !== 'y') {
+    understood = prompt('Ok, time for ' + user2 + ' to guess! Ready?');
+    while (!yesOrNo(understood)) {
+      understood = prompt('Please re-enter your answer.  Only Yes/No answers are accepted.');
+    }
+  }
+
   // BEGIN ASKING QUESTIONS
   for (var i = 0; i < questions.length; i++) {
     // YES/NO QUESTION
@@ -164,7 +159,6 @@ else {
       summary = summary + '\n\nIn response to Question #' + (j+1) + ': ' + questions[j] + ' you made the following guesses: ' + guesses[j] + ' before correctly guessing: ' + answers[j];
     }
   }
-  var sum = document.getElementById('summary1');
-  sum.innerHTML = '' + summary;       // Display the summary results
+  alert(summary);       // Display the summary results
 }
 
