@@ -6,6 +6,16 @@ The script will keep track of the number of questions answered correctly by the 
 
 Version History
 
+v1.6
+
+- ADDED: user feedback system after summary is displayed
+- ADDED: color and images added to the DOM
+
+v1.5
+
+- ADDED: summary, user names now displayed in the DOM
+- CHANGED: logic moved into functions
+
 v1.4
 
 - ADDED: Player 1 can now input numeric question/answers

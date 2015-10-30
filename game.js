@@ -1,3 +1,4 @@
+// v1.6 Added feedback system based on user score; added color, images to DOM
 // v1.5 Moved logic into functions, added summary, user names to the DOM
 // v1.4 Add numeric question/answer with error check
 // v1.3 Summarizes user results; more personalized results; added error correction
@@ -70,7 +71,7 @@ function answerYesNo () {
   if (guesses[i].toLowerCase() === answers[i]) {
     alert('You are correct, ' + user2 + '! ' + responses[i]);
     results.push('o');    // store that player guessed right
-    score++;
+    score += 5;
   }
   // If user guessed wrong, provide the correct response
   else {
@@ -89,6 +90,7 @@ function numAnswer () {
     numArray.push(current);    // store the guess
     if (current > answers[i]) {
       current = parseInt(prompt('Your guess was too high. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+      score--;
       while (!current) {
         if (current === 0) {break;}
         current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
@@ -96,12 +98,14 @@ function numAnswer () {
     }
     else {
       current = parseInt(prompt('Your guess was too low. Please enter a numeric answer.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
+      score--;
       while (!current) {
         if (current === 0) {break;}
         current = parseInt(prompt('That is not a number. Please enter a number.\n\nQuestion #' + (i+1) + ': ' + questions[i]));
       }
     }
   }
+  score += 5;
   results.push('o');                // placeholder (ensures indices remain accurate)
   responses.push('1');              // placeholder (ensures indices remain accurate)
   alert(current + ' is correct!');
@@ -137,10 +141,15 @@ function summarize () {
 // INTRODUCE GAME AND REQUEST USER NAMES, PASSES NAMES TO DOM
 var user1 = prompt("In this game, Player 1 will provide questions/answers for Player 2 to answer.  Please enter Player 1's name now:");
 var user2 = prompt("Great! Now, enter Player 2's name:");
+
 var play1 = document.getElementById('player1');
 var play2 = document.getElementById('player2');
+
 play1.innerHTML = 'Player 1: ' + user1;
 play2.innerHTML = 'Player 2: ' + user2;
+
+play1.className = 'good';
+play2.className = 'bad'
 
 // DECLARE GLOBAL VARIABLES
 var questions = [];                 // Store Player 1's questions
@@ -182,9 +191,27 @@ else {
       numAnswer();
     }
   }
-  // Print summary results to the DOM
+
+  // PRINT SUMMARY TO THE DOM
   summarize();
+  var comment = document.createElement('h1');
+  var image = 'img/codefellows.png';
+  var goodWork = 'img/goodwork.jpg';
+  var badWork = 'img/badwork.png';
+
   var sum = document.getElementById('summary1');
-  sum.innerHTML = '' + summary;
+  sum.innerHTML = '<br><img width = "300" src = "' + image + '"><br>' + summary;
+  sum.className = 'mySumColor';
+
+  // Provide feedback based upon the user's results.
+  if ((score / (5 * questions.length)) > 0.75) {
+    comment.innerHTML = "You're a pretty good guesser, " + user2 + '!' + '<br><img width = "300" src = "' + goodWork + '">';
+    comment.className = 'good';
+  }
+  else {
+    comment.innerHTML = 'You need to practice your guessing skills, ' + user2 + '!' + '<br><img width = "300" src = "' + badWork + '">';;
+    comment.className = 'bad';
+  }
+  document.body.appendChild(comment);
 }
 
