@@ -183,7 +183,10 @@ else {
     }
   }
   summarize();
+  var image = "../img/codefellows.png";
   var sum = document.getElementById('summary1');
-  sum.innerHTML = '' + summary;       // Display the summary results
+  sum.innerHTML = '' + summary + '<br><img width:"300" src="' + image + '">';       // Display the summary results
+  sum.className = 'fellows';
+
 }
 

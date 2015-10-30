@@ -56,3 +56,6 @@ Person 1: MU!
 10/29/15
 Edits to game driven by Emily Friedman and navigated by Chris Lee
 
+10/30/15
+Driver: Adam Palmer
+Navigator:  Chris Lee
