@@ -149,7 +149,7 @@ var answers = [];                   // Store Player 1's answers
 var responses = [];                 // Store Player 1's responses (for y/n questions only)
 var guesses = [];                   // Store Player 2's guesses
 var results = [];                   // Store Player 2's scores (correct/incorrect)
-var score = 0;                      // Count number of Player 2's correct guesses
+var score = 0;                      // Count number of Player 2's correct guesses to y/n
 var summary = "Let's see how you did!<br />";                   // String to display summary of results
 
 // GAME BEGINS HERE
@@ -182,8 +182,9 @@ else {
       numAnswer();
     }
   }
+  // Print summary results to the DOM
   summarize();
   var sum = document.getElementById('summary1');
-  sum.innerHTML = '' + summary;       // Display the summary results
+  sum.innerHTML = '' + summary;
 }
 
